@@ -52,16 +52,19 @@ class ManageController extends CommonController
     {
         $this->layout = 'layout1';
         $model = new Admin;
-        if(Yii::$app->request->isPost){
+        if (Yii::$app->request->isPost) {
             $post = Yii::$app->request->post();
-            if($model->reg($post)){
+            if ($model->reg($post)) {
                 Yii::$app->session->setFlash('info', '添加成功');
             } else {
                 Yii::$app->session->setFlash('info', '添加失败');
             }
         }
-        $this->render('reg',['model'=>$model]);
+        $model->adminpass = '';
+        $model->repass = '';
+        return $this->render('reg', ['model' => $model]);
     }
+
 
     public function actionDel()
     {
@@ -83,7 +86,7 @@ class ManageController extends CommonController
         $model = Admin::find()->where('adminuser = :user', [':user' => Yii::$app->session['admin']['adminuser']])->one();
         if (Yii::$app->request->isPost) {
             $post = Yii::$app->request->post();
-            if ($model->changeemail($post)) {
+            if ($model->changeEmail($post)) {
                 Yii::$app->session->setFlash('info', '修改成功');
             }
         }
@@ -105,7 +108,4 @@ class ManageController extends CommonController
         $model->repass = '';
         return $this->render('changepass', ['model' => $model]);
     }
-
-
-
 }

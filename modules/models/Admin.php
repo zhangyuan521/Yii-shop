@@ -12,6 +12,7 @@ use Yii;
 class Admin extends ActiveRecord
 {
     public $rememberMe = true;
+    public $repass;
 
     public static function tableName()
     {
@@ -106,13 +107,25 @@ class Admin extends ActiveRecord
 
     }
 
+    public function changeEmail($data)
+    {
+        $this->scenario = "changeemail";
+        if ($this->load($data) && $this->validate()) {
+            return (bool)$this->updateAll(['adminemail' => $this->adminemail], 'adminuser = :user', [':user' => $this->adminuser]);
+        }
+        return false;
+
+    }
+
     public function reg($data)
     {
-        $this->scenario = "adminadd";
-        $data['Admin']['adminpass'] = md5($data['Admin']['adminpass']);
-        $data['Admin']['repass'] = md5($data['Admin']['repass']);
-        if($this->load($data) && $this->save()){
-            return true;
+        $this->scenario = 'adminadd';
+        if ($this->load($data) && $this->validate()) {
+            $this->adminpass = md5($this->adminpass);
+            if ($this->save(false)) {
+                return true;
+            }
+            return false;
         }
         return false;
     }
