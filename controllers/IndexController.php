@@ -1,23 +1,18 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: duke
- * Date: 2017/3/14
- * Time: 下午10:40
- */
 namespace app\controllers;
-use yii\web\Controller;
-use app\models\Test;
 
-class IndexController extends Controller
+use app\controllers\CommonController;
+use app\models\Product;
+
+class IndexController extends CommonController
 {
     public function actionIndex()
     {
-        $model = new Test();
-        $data = $model->find()->one();
-        $this->layout = 'layout1';
-        return $this->render('index', array(
-            'row'=>$data
-        ));
+        $this->layout = "layout1";
+        $data['tui'] = Product::find()->where('istui = "1" and ison = "1"')->orderby('createtime desc')->limit(4)->all();
+        $data['new'] = Product::find()->where('ison = "1"')->orderby('createtime desc')->limit(4)->all();
+        $data['hot'] = Product::find()->where('ison = "1" and ishot = "1"')->orderby('createtime desc')->limit(4)->all();
+        $data['all'] = Product::find()->where('ison = "1"')->orderby('createtime desc')->limit(7)->all();
+        return $this->render("index", ['data' => $data]);
     }
 }

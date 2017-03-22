@@ -92,4 +92,11 @@ class MemberController extends CommonController
         return $this->render('qqreg', ['model' => $model]);
     }
 
+
+
+
+
+
+
+
 }
